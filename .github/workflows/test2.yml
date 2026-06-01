@@ -1,0 +1,7 @@
+name: On Push
+on: push
+jobs:
+  Builder:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Message from test2"
