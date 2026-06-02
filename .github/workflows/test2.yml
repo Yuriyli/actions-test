@@ -4,4 +4,28 @@ jobs:
   Builder:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Message from test2"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Angular CLI
+        run: npm install -g @angular/cli
+
+      - name: Run linting
+        run: ng lint
+
+      - name: Run tests
+        run: ng test --no-watch --no-progress
+        env:
+          CI: true
+
+      - name: Build
+        run: ng build
