@@ -26,12 +26,17 @@ jobs:
         id: cache
         with:
           path: node_modules
-          key: ${{ runner.os }}-cache-${{ hashFiles('**/lockfiles') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
         
   linter:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/cache/restore@v5
+        id: cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
       - name: Run linting
         run: ng lint
         
