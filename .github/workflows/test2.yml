@@ -3,15 +3,27 @@ on: push
 jobs:
   setup:
     runs-on: ubuntu-latest
+    outputs:
+      version_number: ${{ steps.vars.outputs.cache_key }}
     steps:
       - name: Checkout repository
+        id: checkout
         uses: actions/checkout@v6
-        env:
-          KEY: ${{ runner.os }}-cache-${{ hashFiles('package-lock.json') }}
+ 
+      - name: set-output
+        id: vars
+        run: echo "cache_key=${{ runner.os }}-cache-${{ hashFiles('package-lock.json') }}" >> "$GITHUB_OUTPUT"
+        shell: bash
+
+      - name: setup env variable
+        run: echo "env variable is $APPLICATION_VERSION_NO "
+        env:  
+          CACHE_KEY: ${{ steps.vars.outputs.cache_key }}
+      
         
       - name: List files in the repository
         run: |
-          echo "helo helo $KEY"
+          echo "helo helo $CACHE_KEY"
           ls ${{ github.workspace }}
 
       - name: Install dependencies
