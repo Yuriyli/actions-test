@@ -1,7 +1,7 @@
 name: On Push
 on: push
 jobs:
-  Builder:
+  setup:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -11,13 +11,16 @@ jobs:
         run: npm ci
 
       - name: Install Angular CLI
-        run: npm install -g @angular/cli
-
-      - name: Run linting
-        run: ng lint
+        run: npm install -g @angular/cli    
 
       - name: Run tests
         run: ng test --no-watch
         
       - name: Build
         run: ng build
+  linter:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run linting
+        run: ng lint
