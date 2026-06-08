@@ -6,21 +6,46 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+        
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
 
       - name: Install dependencies
         run: npm ci
 
       - name: Install Angular CLI
-        run: npm install -g @angular/cli    
+        run: npm install -g @angular/cli
 
-      - name: Run tests
-        run: ng test --no-watch
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
         
-      - name: Build
-        run: ng build
+        
+      - uses: actions/cache/save@v5
+        id: cache
+        with:
+          path: dependencies
+          key: ${{ runner.os }}-cache-${{ hashFiles('**/lockfiles') }}
+        
   linter:
     needs: setup
     runs-on: ubuntu-latest
     steps:
       - name: Run linting
         run: ng lint
+        
+  tests:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run tests
+        run: ng test --no-watch
+        
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        run: ng build
+    
