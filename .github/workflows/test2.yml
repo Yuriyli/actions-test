@@ -27,10 +27,7 @@ jobs:
       - uses: actions/cache/save@v5
         id: cache
         with:
-          path: |
-            node_modules
-            package.json
-            package-lock.json
+          path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
         
   linter:
@@ -40,15 +37,16 @@ jobs:
       - uses: actions/cache/restore@v5
         id: cache
         with:
-          path: |
-            node_modules
-            package.json
-            package-lock.json
+          path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
+          
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
+          
+      - name: Install Angular CLI
+        run: npm install -g @angular/cli
+        
       - name: Run linting
         run: ng lint
         
