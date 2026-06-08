@@ -25,7 +25,10 @@ jobs:
       - uses: actions/cache/save@v5
         id: cache
         with:
-          path: node_modules
+          path: |
+            node_modules
+            package.json
+            package-lock.json
           key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
         
   linter:
@@ -35,7 +38,10 @@ jobs:
       - uses: actions/cache/restore@v5
         id: cache
         with:
-          path: node_modules
+          path: |
+            node_modules
+            package.json
+            package-lock.json
           key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
       - name: Run linting
         run: ng lint
