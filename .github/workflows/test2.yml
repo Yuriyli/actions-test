@@ -20,7 +20,9 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
-        
+          
+      - name: Run linting
+        run: ng lint
         
       - uses: actions/cache/save@v5
         id: cache
@@ -43,6 +45,10 @@ jobs:
             package.json
             package-lock.json
           key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
       - name: Run linting
         run: ng lint
         
