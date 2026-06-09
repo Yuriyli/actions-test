@@ -11,7 +11,7 @@ jobs:
         
       - name: Checkout cache
         id: cache_check
-        uses: actions/restore@v5
+        uses: actions/cache/restore@v5
         with:
           path: node_modules
           key: ${{ runner.os }}-cache-${{ hashFiles('package-lock.json') }}
