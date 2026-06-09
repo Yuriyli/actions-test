@@ -17,8 +17,8 @@ jobs:
           lookup-only: true
           
       - name: Skip new cache        
-        if: steps.cache_check.outputs.cache-hit != 'true'
-        run: echo "Cache not found, creating new."
+        if: steps.cache_check.outputs.cache-hit == 'true'
+        run: # exit_with_success
                 
       - name: Install dependencies
         run: npm ci
