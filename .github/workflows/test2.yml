@@ -44,7 +44,7 @@ jobs:
         id: cache
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-cache-${{ hashFiles('package-lock.json') }}
           
       - name: Install Angular CLI
         run: npm install -g @angular/cli
@@ -64,7 +64,7 @@ jobs:
         id: cache
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-cache-${{ hashFiles('package-lock.json') }}
           
       - name: Install Angular CLI
         run: npm install -g @angular/cli
@@ -84,7 +84,7 @@ jobs:
         id: cache
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-cache-${{ hashFiles('package-lock.json') }}
           
       - name: Install Angular CLI
         run: npm install -g @angular/cli
