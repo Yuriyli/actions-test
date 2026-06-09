@@ -1,7 +1,8 @@
 name: On Push
 on: push
 jobs:
-  setup:
+  check_cache:
+    name: Cache check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -22,11 +23,7 @@ jobs:
         
       - name: Install dependencies
         if: steps.cache_check.outputs.cache-hit != 'true'
-        run: npm ci
-        
-      - name: Install Angular CLI
-        if: steps.cache_check.outputs.cache-hit != 'true'
-        run: npm install -g @angular/cli
+        run: npm ci  
         
       - uses: actions/cache/save@v5
         if: steps.cache_check.outputs.cache-hit != 'true'
@@ -36,7 +33,8 @@ jobs:
           key: ${{ runner.os }}-cache-${{ hashFiles('package-lock.json') }}
           
   linter:
-    needs: setup
+    name: Running linter
+    needs: check_cache
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -55,7 +53,8 @@ jobs:
         run: ng lint
         
   tests:
-    needs: setup
+    name: Running tests
+    needs: check_cache
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -74,7 +73,8 @@ jobs:
         run: ng test --no-watch
         
   build:
-    needs: setup
+    name: Checking the application build
+    needs: check_cache
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
