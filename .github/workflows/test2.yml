@@ -11,7 +11,7 @@ jobs:
         
       - name: Checkout cache
         id: cache_check
-        uses: actions/cache@v5
+        uses: actions/restore@v5
         with:
           path: node_modules
           key: ${{ runner.os }}-cache-${{ hashFiles('package-lock.json') }}
@@ -73,7 +73,7 @@ jobs:
         run: ng test --no-watch
         
   build:
-    name: Checking the application build
+    name: Running build
     needs: check_cache
     runs-on: ubuntu-latest
     steps:
