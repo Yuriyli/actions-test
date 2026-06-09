@@ -3,41 +3,28 @@ on: push
 jobs:
   setup:
     runs-on: ubuntu-latest
-    outputs:
-      version_number: ${{ steps.vars.outputs.cache_key }}
     steps:
       - name: Checkout repository
         id: checkout
-        uses: actions/checkout@v6
- 
-      - name: set-output
-        id: vars
-        run: echo "cache_key=${{ runner.os }}-cache-${{ hashFiles('package-lock.json') }}" >> "$GITHUB_OUTPUT"
-        shell: bash
+        uses: actions/checkout@v6       
 
-      - name: setup env variable
-        run: echo "env variable is $APPLICATION_VERSION_NO "
-        env:  
-          CACHE_KEY: ${{ steps.vars.outputs.cache_key }}
-      
-        
-      - name: List files in the repository
-        run: |
-          echo "helo helo $CACHE_KEY"
-          ls ${{ github.workspace }}
-
+      - name: Checkout cache
+        id: cache_check
+        uses: actions/cache@v5
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-cache-${{ hashFiles('package-lock.json') }}
+          lookup-only: true
+          
+      - name: Skip new cache        
+        if: steps.cache_check.outputs.cache-hit != 'true'
+        run: echo "Cache not found, creating new."
+                
       - name: Install dependencies
         run: npm ci
 
       - name: Install Angular CLI
         run: npm install -g @angular/cli
-
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-          
-      - name: Run linting
-        run: ng lint
         
       - uses: actions/cache/save@v5
         id: cache
